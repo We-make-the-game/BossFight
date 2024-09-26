@@ -28,6 +28,8 @@ namespace VEOController
         public PlayerInputs inputs;
         public PlayerEffects effects;
         public PlayerAnimations anim;
+        public Combat combat;
+        public CombatFunctions combatFunctions;
         #endregion
 
         #region Enablers
@@ -40,6 +42,7 @@ namespace VEOController
         [HideInInspector] public bool enableDash = true;
         [HideInInspector] public bool enableGrab = true;
         [HideInInspector] public bool enableAnimations = true;
+        [HideInInspector] public bool enableCombat = true;
         #endregion
 
         #region States
@@ -100,6 +103,7 @@ namespace VEOController
 
             anim?.PopulateClips();
             anim.controller = this;
+            combatFunctions = GetComponent<CombatFunctions>();
 
             GetCalls();
             SetRigidbody();
@@ -580,6 +584,7 @@ namespace VEOController
         {
             if (!attackReady) return;
             StartCoroutine(Attacking());
+            combatFunctions.TakeDamage(10);
         }
 
         private IEnumerator HeavyAttacking()

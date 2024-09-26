@@ -21,6 +21,7 @@ namespace VEOController
         "Effects",
         "Inputs",
         "Callbacks",
+        "Combat"
     };
         private int index = 0;
 
@@ -40,6 +41,7 @@ namespace VEOController
         private bool enableGrab;
         private bool enableEffects;
         private bool enableAnimations;
+        private bool enableCombat;
         #endregion
 
         #region Properties
@@ -133,7 +135,7 @@ namespace VEOController
         private SerializedProperty climbingDownSpeed;
         private SerializedProperty maxSlideSpeed;
         private SerializedProperty slideSpeed;
-
+    
         // Effects
         private SerializedProperty warnings;
         private SerializedProperty effects;
@@ -141,6 +143,12 @@ namespace VEOController
         // Animations
         private SerializedProperty animator;
         private SerializedProperty animations;
+
+        // Combat
+        private SerializedProperty healthBar;
+        private SerializedProperty health;
+        private SerializedProperty damageCoolDownTime;
+
         #endregion
         Color defaultColor;
         // Functions
@@ -165,6 +173,7 @@ namespace VEOController
             SerializeEffects();
             SerializeAnimation();
             SerializeInputs();
+            SerializeCombat();
         }
 
         public override void OnInspectorGUI()
@@ -236,6 +245,10 @@ namespace VEOController
                 case 11:
                     Title("CALLBACKS");
                     ShowCallbacks();
+                    break;
+                case 12:
+                    Title("COMBAT");
+                    ShowCombat();
                     break;
             }
         }
@@ -355,6 +368,12 @@ namespace VEOController
             horizontalAxis = GetVariables("inputs.horizontalAxis");
             verticalAxis = GetVariables("inputs.verticalAxis");
             actions = GetVariables("inputs.keys");
+        }
+        private void SerializeCombat()
+        {
+            healthBar = soController.FindProperty("combat.healthBar");
+            health = GetVariables("combat.health");
+            damageCoolDownTime = GetVariables("combat.damageCoolDownTime");
         }
 
         // Draw
@@ -586,6 +605,17 @@ namespace VEOController
 
             soController.ApplyModifiedProperties();
         }
+        private void ShowCombat()
+        {
+            enableCombat = CheckActive("Combat", enableCombat);
+            controller.enableCombat = enableCombat;
+
+            Separator("Player Health");
+            Show(healthBar);
+            EditorGUILayout.HelpBox("The Max player health is 100", MessageType.Info);
+            Show(health);
+            Show(damageCoolDownTime);
+        }
 
         // UI
         private void Separator(string title)
@@ -683,6 +713,7 @@ namespace VEOController
             enableGrab = Enabled("Grab");
             enableEffects = Enabled("Effects");
             enableAnimations = Enabled("Animations");
+            enableCombat = Enabled("Combat");
 
             static bool Enabled(string tag)
             {
