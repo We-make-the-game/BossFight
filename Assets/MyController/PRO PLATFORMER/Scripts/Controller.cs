@@ -584,7 +584,6 @@ namespace VEOController
         {
             if (!attackReady) return;
             StartCoroutine(Attacking());
-            combatFunctions.TakeDamage(10);
         }
 
         private IEnumerator HeavyAttacking()
