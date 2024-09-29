@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 namespace VEOController
@@ -252,5 +253,14 @@ namespace VEOController
         [SerializeField] public bool fixedSlideSpeed = true;
         [Range(0f, 10f)][SerializeField] public float maxSlideSpeed = 10;
         [Range(0f, 10f)][SerializeField] public float slideSpeed = 5;
+    }
+    [Serializable]
+    public class Combat
+    {
+        [SerializeField] public Image healthBar;
+        public const float maxHealth = 100; // Max Health
+        [Range(0f, maxHealth)][SerializeField] public float health = maxHealth; // Current Health
+        [Range(0f, 10f)][SerializeField] public float damageCoolDownTime = 3f;
+        public float lastDamageTime = 0;
     }
 }
