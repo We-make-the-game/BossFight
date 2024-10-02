@@ -34,11 +34,16 @@ namespace VEOController
         // Update is called once per frame
         void Update()
         {
+            if (playerCtrl.isDead) 
+            {
+                RockAni.SetBool("isWalking", false);
+                return;
+            }
             UpdateHealthBar(health);
             UpdateMovement();
             if (!isMoving && Time.time - preAttackTime > attackCooldown)
             {
-                AttackPlayer();
+                StartCoroutine(AttackPlayerCoroutine());
             }
         }
 
@@ -71,15 +76,15 @@ namespace VEOController
             RockAni.SetBool("isWalking", isMoving);
         }
 
-        void AttackPlayer()
+        private IEnumerator AttackPlayerCoroutine()
         {
             preAttackTime = Time.time;
             RockAni.SetTrigger("Attack1");
-            StartCoroutine(WaitCoroutine(0.03f));
+            yield return new WaitForSeconds(0.3f);
             float distanceToPlayer = player.transform.position.x - transform.position.x;
             if (Mathf.Abs(distanceToPlayer) <= attackRange)
             {
-                playerCombat.TakeDamage(10);
+                playerCombat.TakeDamage(30);
             }
         }
 

@@ -54,6 +54,8 @@ namespace VEOController
             callbacks.attack.OnHeavyAttackEnd.AddListener(OnHeavyAttackEnd);
             callbacks.attack.OnAirAttack.AddListener(OnAirAttack);
             callbacks.attack.OnWallAttack.AddListener(OnWallAttack);
+            callbacks.attack.OnTakeHit.AddListener(OnTakeHit);
+            callbacks.attack.Death.AddListener(Death);
         }
 
         // Walk
@@ -177,6 +179,17 @@ namespace VEOController
             StartAttack();
             controller.isAttacking = true;
             anim.PlayAnimation("Wall Attack", 0, EndAttack);
+        }
+
+        public void OnTakeHit()
+        {
+            anim.PlayAnimation("GetHit", 0);
+        }
+
+        public void Death()
+        {
+            controller.isDead = true;
+            anim.PlayAnimation("Dying", 0);
         }
     }
 }

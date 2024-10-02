@@ -15,6 +15,7 @@ namespace VEOController
             public UnityEvent OnAirAttack;
             public UnityEvent OnWallAttack;
             public UnityEvent OnTakeHit;
+            public UnityEvent Death;
         }
         public AttackCallbacks attack;
         [Serializable]

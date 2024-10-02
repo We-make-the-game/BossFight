@@ -82,8 +82,6 @@ namespace VEOController
             onFinish?.Invoke();
         }
 
-
-
         // Public Functions
         public void UpdateAnimations()
         {
@@ -128,6 +126,9 @@ namespace VEOController
                     break;
                 case StatesHandler.State.PrepareToWallJump:
                     PlayLoopAnimation("Wall Sliding", 0);
+                    break;
+                case StatesHandler.State.Dead:
+                    PlayLoopAnimation("Dead", 0);
                     break;
             }
         }

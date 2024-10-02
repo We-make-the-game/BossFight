@@ -62,6 +62,8 @@ namespace VEOController
         [HideInInspector] public bool isAttacking = false;
         [HideInInspector] public bool isSlopSliding = false;
         [HideInInspector] private bool isFacingRight => rotation.skin.localEulerAngles == Vector3.zero;
+        [HideInInspector] public bool isDead = false;
+
 
         public bool isPushingAgainstWall
         {

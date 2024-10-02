@@ -22,6 +22,7 @@ namespace VEOController
             WallHanging,
             PrepareToWallJump,
             SlopSliding,
+            Dead
         }
         public State currentState;
 
@@ -36,7 +37,11 @@ namespace VEOController
         {
             if (AnyState()) { return; }
 
-            if (player.isGrabing)
+            if (player.isDead)
+            {
+                UpdateState(State.Dead);
+            }
+            else if (player.isGrabing)
             {
                 if (player.isClimbingUp)
                 {
