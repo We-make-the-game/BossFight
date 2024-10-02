@@ -22,14 +22,20 @@ namespace VEOController
                 return;
             }
             Debug.Log("Player TakeDamage");
+            // update lastDamageTime
             combat.lastDamageTime = Time.time;
+            // update health
             float preHealth = combat.health;
             combat.health = Mathf.Max(0, combat.health - damage);
             UpdateHealthBar(preHealth/Combat.maxHealth, combat.health/Combat.maxHealth);
+            // if die
             if (combat.health == 0)
             {
                 Die();
+                return;
             }
+            // damage effect
+            OnHit();
         }
 
         // public void Attack()
@@ -50,6 +56,7 @@ namespace VEOController
         public void Die()
         {
             Debug.Log("Die");
+            controller.callbacks.attack.Death?.Invoke();
         }
 
         private void UpdateHealthBar(float health)
@@ -73,7 +80,6 @@ namespace VEOController
         {
             float elapsedTime = 0f;
             combat.healthBar.fillAmount = startFill;
-
             while (elapsedTime < animationDuration)
             {
                 combat.healthBar.fillAmount = Mathf.Lerp(startFill, endFill, elapsedTime / animationDuration);
@@ -82,5 +88,35 @@ namespace VEOController
             }
             combat.healthBar.fillAmount = endFill;
         }
+
+        private void OnHit()
+        {
+            StartCoroutine(FlashCoroutine());
+            //controller.callbacks.attack.OnTakeHit?.Invoke();
+        }
+
+        private IEnumerator FlashCoroutine()
+        {
+            float elapsedTime = 0;
+            float flashDuration = 1.0f;
+            float flashInterval = 0.1f;
+            var spriteRenderer = controller.rotation.skin.GetComponent<SpriteRenderer>();
+            while (elapsedTime < flashDuration)
+            {
+                Color color = spriteRenderer.color;
+                // change alpha value
+                color.a = color.a == 1f ? 0.3f : 1f;
+                spriteRenderer.color = color;
+                // wait for interval time
+                yield return new WaitForSeconds(flashInterval);
+                elapsedTime += flashInterval;
+            }
+
+            // make sure the sprite is visible
+            Color resetColor = spriteRenderer.color;
+            resetColor.a = 1f;
+            spriteRenderer.color = resetColor;
+        }
+
     }
 }
